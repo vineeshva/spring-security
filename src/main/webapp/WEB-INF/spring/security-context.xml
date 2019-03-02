@@ -3,11 +3,14 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:security="http://www.springframework.org/schema/security"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.0.xsd">
-
+    <bean class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler"></bean>
 	<security:http auto-config="true" use-expressions="false">
 		<!-- <security:http-basic /> -->
-		<security:form-login login-page="/login" login-processing-url="/login" username-parameter="custom_username" password-parameter="custom_password"/>
-		<security:intercept-url pattern="/appointments/*"
+		<security:form-login login-page="/login" login-processing-url="/login" username-parameter="custom_username" 
+		   password-parameter="custom_password" default-target-url="/appointments/"
+		   always-use-default-target="true" authentication-failure-url="/login?error=true"/>
+		   <security:logout logout-url="/logout" logout-success-url="/login?logout=true"/>
+		<security:intercept-url pattern="/appointments/"
 			access="ROLE_USER" />
 		<security:intercept-url pattern="/schedule/*"
 			access="ROLE_FOO" />
