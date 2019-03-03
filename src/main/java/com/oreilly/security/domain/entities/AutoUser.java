@@ -1,6 +1,7 @@
 package com.oreilly.security.domain.entities;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -12,11 +13,15 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "AUTO_USER")
-public class AutoUser {
+public class AutoUser implements UserDetails {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -100,5 +105,30 @@ public class AutoUser {
 		this.role = role;
 	}
 
-	
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {		
+		return AuthorityUtils.createAuthorityList(this.role);
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {		
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {		
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {		
+		return true;
+	}
+
+
 }
