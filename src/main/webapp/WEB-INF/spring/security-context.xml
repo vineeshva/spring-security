@@ -8,12 +8,18 @@
 	<context:component-scan base-package="com.oreilly.security"></context:component-scan>
 	<bean
 		class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler"></bean>
-	<security:http auto-config="true" use-expressions="false">
+		
+		
+		
+	<security:http use-expressions="false" entry-point-ref="loginEntryPoint">
 		<!-- <security:http-basic /> -->
+		<!-- 
 		<security:form-login login-page="/login"
 			login-processing-url="/login" username-parameter="custom_username"
 			password-parameter="custom_password" default-target-url="/"
 			always-use-default-target="true" authentication-failure-url="/login?error=true" />
+			 -->
+		<security:custom-filter ref="customFormLoginFilter" position="FORM_LOGIN_FILTER"/>		 
 		<security:logout logout-url="/logout"
 			logout-success-url="/login?logout=true" />
 		<security:intercept-url pattern="/schedule/*"
@@ -23,13 +29,39 @@
 		<security:intercept-url pattern="/**"
 			access="ROLE_ANONYMOUS,ROLE_USER,ROLE_ADMIN" />
 	</security:http>
+	
+	<bean id="customFormLoginFilter" class="com.oreilly.security.CustomAuthenticationFilter">
+		<property name="filterProcessesUrl" value="/login"/>
+		<property name="authenticationManager" ref="authenticationManager"/>
+		<property name="usernameParameter" value="custom_username"/> 
+  		<property name="passwordParameter" value="custom_password"/> 
+  		<property name="authenticationSuccessHandler"> 
+   		 	<bean class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler"> 
+      			<property name="defaultTargetUrl" value="/"/> 
+    		</bean> 
+  		</property> 
+  		<property name="authenticationFailureHandler"> 
+    		<bean class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler"> 
+      			<property name="defaultFailureUrl" value="/login/failure?error=true"/>
+    		</bean> 
+  		</property> 
+	</bean>
+	
+	<bean id="loginEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+		<constructor-arg value="/login"/>
+	</bean>
 
-	<security:authentication-manager>
+	<security:authentication-manager alias="authenticationManager">
 		<!-- <security:authentication-provider> <security:user-service> <security:user 
 			name="user" password="password" authorities="ROLE_ANONYMOUS,ROLE_USER" /> 
 			<security:user name="admin" password="password" authorities="ROLE_ANONYMOUS,ROLE_USER,ROLE_FOO" 
-			/> </security:user-service> </security:authentication-provider> -->
+			/> </security:user-service> </security:authentication-provider> 
 		<security:authentication-provider
 			user-service-ref="CustomUserDetailsService" />
+			-->
+			<security:authentication-provider
+			ref="customAuthenticationProvider" />
 	</security:authentication-manager>
+	
+	
 </beans>

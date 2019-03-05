@@ -15,14 +15,22 @@ import com.oreilly.security.domain.repositories.AutoUserRepository;
 @Controller
 @RequestMapping("/")
 public class HomeController {
+	
 	@Autowired
 	private AutoUserRepository repo;
-	
+
+	@RequestMapping(value="/login/failure", method=RequestMethod.GET)
+	public String goFailure(){
+		return "login";
+	}
+
 	@RequestMapping(value="/register", method=RequestMethod.POST)
 	public String register(@ModelAttribute AutoUser user){
 		user.setRole("ROLE_USER");
 		repo.save(user);
-		Authentication auth = new UsernamePasswordAuthenticationToken(user, user.getPassword(),user.getAuthorities());
+		
+		Authentication auth = new UsernamePasswordAuthenticationToken(user, 
+				user.getPassword(), user.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(auth);
 		return "redirect:/";
 	}
@@ -31,7 +39,7 @@ public class HomeController {
 	public String goRegister(){
 		return "register";
 	}
-
+	
 	@RequestMapping(method=RequestMethod.GET)
 	public String goHome(){
 		return "home";

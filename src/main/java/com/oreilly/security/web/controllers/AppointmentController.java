@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.oreilly.security.domain.entities.Appointment;
 import com.oreilly.security.domain.entities.AutoUser;
 import com.oreilly.security.domain.repositories.AppointmentRepository;
-import com.oreilly.security.domain.repositories.AutoUserRepository;
 
 
 @Controller()
@@ -25,9 +24,6 @@ public class AppointmentController {
 	@Autowired
 	private AppointmentRepository appointmentRepository;
 
-	@Autowired
-	private AutoUserRepository autoUserRepository;
-	
 	@ModelAttribute
 	public Appointment getAppointment(){
 		return new Appointment();
@@ -41,7 +37,7 @@ public class AppointmentController {
 	@ResponseBody
 	@RequestMapping(value="/save", method=RequestMethod.POST)
 	public List<Appointment> saveAppointment(@ModelAttribute Appointment appointment){
-		AutoUser user = (AutoUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();		
+		AutoUser user= (AutoUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		appointment.setUser(user);
 		appointment.setStatus("Initial");
 		appointmentRepository.save(appointment);
