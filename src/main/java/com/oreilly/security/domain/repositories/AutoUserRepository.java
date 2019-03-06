@@ -6,5 +6,4 @@ import com.oreilly.security.domain.entities.AutoUser;
 
 public interface AutoUserRepository extends JpaRepository<AutoUser, Long> {
 
-	public AutoUser findByUsername(String username);
 }
