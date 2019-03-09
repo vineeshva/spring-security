@@ -32,7 +32,8 @@
 					from groups g, group_members gm, group_authorities ga where
 					gm.username = ? and g.id = ga.group_id and g.id = gm.group_id"
 			/>
+			<security:password-encoder ref="passwordEncoder"/>
 		</security:authentication-provider>
 	</security:authentication-manager>
-
+    <bean id="passwordEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder"></bean>
 </beans>

@@ -5,7 +5,7 @@
     
     create table users(
 		username varchar_ignorecase(50) not null primary key,
-		password varchar_ignorecase(50) not null,
+		password varchar_ignorecase(500) not null,
 		enabled boolean not null
 	);
 	
@@ -72,7 +72,7 @@ create table APPOINTMENT (
         foreign key (APPOINTMENT_ID) 
         references APPOINTMENT;
 
-insert into users(username, password, enabled) values ('nuser', 'password', 1);
+insert into users(username, password, enabled) values ('nuser', '3022aef148d20ac2dec421d099a48f75f6b0591300eb7521cf81a29d8e1ee65024335056405983c4', 1);
 insert into users(username, password, enabled) values ('auser', 'password', 1);
 
 insert into groups(id, group_name) values(1, 'Admins');
