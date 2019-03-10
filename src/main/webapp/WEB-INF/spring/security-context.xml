@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.0.xsd
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd">
+    <context:component-scan base-package="com.oreilly.security"></context:component-scan>
 	<bean
 		class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler" />
 
@@ -26,6 +29,7 @@
 	</security:http>
 
 	<security:authentication-manager>
+	    <!-- 
 		<security:authentication-provider>
 			<security:jdbc-user-service data-source-ref="datasource"
 				group-authorities-by-username-query="select g.id, g.group_name, ga.authority
@@ -34,6 +38,13 @@
 			/>
 			<security:password-encoder ref="passwordEncoder"/>
 		</security:authentication-provider>
+		 -->
+		 <security:ldap-authentication-provider user-search-filter="(uid={0})"
+		 group-search-base="ou=groups" group-search-filter="(uniqueMember={0})" 
+		 server-ref="ldapServer" user-context-mapper-ref="contextMapper" role-prefix="ROLE_"
+		 group-role-attribute="cn"/>
 	</security:authentication-manager>
+	<security:ldap-server id="ldapServer" url="ldap://localhost:10389/dc=oreilly,dc=com"
+	manager-dn="uid=admin,ou=system" manager-password="secret"/>
     <bean id="passwordEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder"></bean>
 </beans>

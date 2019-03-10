@@ -3,6 +3,7 @@ package com.oreilly.security.web.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -36,10 +37,7 @@ public class AppointmentController {
 	@ResponseBody
 	@RequestMapping(value="/save", method=RequestMethod.POST)
 	public List<Appointment> saveAppointment(@ModelAttribute Appointment appointment){
-		AutoUser user = new AutoUser();
-		user.setEmail("test@email.com");
-		user.setFirstName("Joe");
-		user.setLastName("Doe");
+		AutoUser user = (AutoUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		appointment.setUser(user);
 		appointment.setStatus("Initial");
 		appointmentRepository.save(appointment);
