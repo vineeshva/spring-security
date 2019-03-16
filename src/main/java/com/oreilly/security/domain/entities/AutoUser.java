@@ -12,43 +12,51 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name="AUTO_USER")
-public class AutoUser implements UserDetails{
+@Table(name = "AUTO_USER")
+public class AutoUser implements UserDetails {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long autoUserId;
 
-	@Column(name="FIRST_NAME")
+	@Column(name = "FIRST_NAME")
 	private String firstName;
 
-	@Column(name="LAST_NAME")
+	@Column(name = "LAST_NAME")
 	private String lastName;
 
-	@Column(name="USERNAME")
+	@Column(name = "USERNAME")
 	private String username;
 
-	@Column(name="PASSWORD")
+	@Column(name = "PASSWORD")
 	private String password;
 
-	@Column(name="EMAIL")
+	@Column(name = "EMAIL")
 	private String email;
 
+	@Column(name = "ROLE")
+	private String role;
+
 	@JsonIgnore
-	@OneToMany(mappedBy="user", cascade=CascadeType.PERSIST)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
 	private List<Appointment> appointments = new ArrayList<Appointment>();
-	
-	@Transient
-	private Collection<? extends GrantedAuthority> authorities;
-	
+
+	public Long getAutoUserId() {
+		return autoUserId;
+	}
+
+	public void setAutoUserId(Long autoUserId) {
+		this.autoUserId = autoUserId;
+	}
+
 	public String getFirstName() {
 		return firstName;
 	}
@@ -97,13 +105,17 @@ public class AutoUser implements UserDetails{
 		this.appointments = appointments;
 	}
 
-	public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
-		this.authorities = authorities;
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return this.authorities;
+		return AuthorityUtils.createAuthorityList(this.role);
 	}
 
 	@Override
@@ -113,19 +125,16 @@ public class AutoUser implements UserDetails{
 
 	@Override
 	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public boolean isCredentialsNonExpired() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public boolean isEnabled() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
