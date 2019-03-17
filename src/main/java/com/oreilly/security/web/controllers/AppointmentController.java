@@ -8,7 +8,6 @@ import javax.annotation.security.RolesAllowed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PostFilter;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,10 +30,10 @@ public class AppointmentController {
 
 	@Autowired
 	private AppointmentRepository appointmentRepository;
-	
+
 	@Autowired
 	private AppointmentUtils util;
-
+	
 	@ModelAttribute("isUser")
 	public boolean isUser(Authentication auth){
 		return auth != null &&
@@ -45,22 +44,21 @@ public class AppointmentController {
 	public Appointment getAppointment() {
 		return new Appointment();
 	}
-	
+
 	@RequestMapping("/test")
 	@ResponseBody
-	public String testPreFilter(Authentication auth){
+	public String testPrefilter(Authentication auth){
 		AutoUser user = (AutoUser) auth.getPrincipal();
 		AutoUser otherUser = new AutoUser();
 		otherUser.setEmail("haxor@haxor.org");
 		otherUser.setAutoUserId(100L);
-		return util.saveAll(new ArrayList<Appointment>(){
-			{
-				add(AppointmentUtils.createAppointment(user));
-				add(AppointmentUtils.createAppointment(otherUser));
-			}			
-		});
+		
+		return util.saveAll(new ArrayList<Appointment>(){{
+			add(AppointmentUtils.createAppointment(user));
+			add(AppointmentUtils.createAppointment(otherUser));
+		}});
 	}
-
+	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String getAppointmentPage() {
 		return "appointments";
@@ -84,7 +82,7 @@ public class AppointmentController {
 	}
 
 	@RequestMapping("/{appointmentId}")
-	@PostAuthorize("returnObject == 'appointment'")
+	@PostAuthorize("hasPermission(#model['appointment'],'read')")
 	public String getAppointment(@PathVariable("appointmentId") Long appointmentId, Model model) {
 		Appointment appointment = appointmentRepository.findOne(appointmentId);
 		model.addAttribute("appointment", appointment);
@@ -92,11 +90,10 @@ public class AppointmentController {
 	}
 
 	@ResponseBody
-	@RequestMapping("/confirm")
-	//@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RolesAllowed("ROLE_ADMIN")
-	public String confirm() {
-		return "confirmed";
+	@RequestMapping("/confirm/{appointmentId}")
+	@PostAuthorize("hasPermission(returnObject,'administration')")
+	public Appointment confirm(@PathVariable Long appointmentId) {
+		return this.appointmentRepository.findOne(appointmentId);
 	}
 
 	@ResponseBody
@@ -107,7 +104,6 @@ public class AppointmentController {
 
 	@ResponseBody
 	@RequestMapping("/complete")
-	//@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RolesAllowed("ROLE_ADMIN")
 	public String complete() {
 		return "completed";

@@ -64,15 +64,15 @@
 					href="<spring:url value="/appointments/"/>" role="button">Back</a>				
 				<sec:authorize access="${isUser}">
 					<a class="btn btn-default" 
-						href="<spring:url value="/appointments/cancel"/>" role="button">Cancel</a>
+						href="<spring:url value="/appointments/cancel/${appointment.appointmentId}"/>" role="button">Cancel</a>
 				</sec:authorize>
 				<sec:authorize access="hasAuthority('ROLE_ADMIN')">
 					<a class="btn btn-default" 
-						href="<spring:url value="/appointments/confirm"/>" role="button">Confirm</a>
+						href="<spring:url value="/appointments/confirm/${appointment.appointmentId}"/>" role="button">Confirm</a>
 				</sec:authorize>
 				<sec:authorize url="/schedule/*">
 					<a class="btn btn-default" 
-						href="<spring:url value="/appointments/complete"/>" role="button">Mark Complete</a>		
+						href="<spring:url value="/appointments/complete/${appointment.appointmentId}"/>" role="button">Mark Complete</a>		
 				</sec:authorize>
 			</li>
 		</ul>
