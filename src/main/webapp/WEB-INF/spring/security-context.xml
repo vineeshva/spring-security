@@ -10,7 +10,7 @@
 	<context:component-scan base-package="com.oreilly.security"/>
 	<bean class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler"/>
 		
-	<security:http auto-config="true" use-expressions="true">
+	<security:http auto-config="true" use-expressions="false">
 		<security:form-login login-page="/login" login-processing-url="/login" username-parameter="custom_username" 
 			password-parameter="custom_password"
 			default-target-url="/appointments/"
@@ -19,9 +19,9 @@
 		
 		<security:logout logout-url="/logout" logout-success-url="/login?logout=true"/>
 			
-		<security:intercept-url pattern="/appointments/*" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')" requires-channel="https"/>
-		<security:intercept-url pattern="/schedule/*" access="principal.username == 'kbowersox'" requires-channel="https"/>
-		<security:intercept-url pattern="/**" access="permitAll" requires-channel="https"/>
+		<security:intercept-url pattern="/appointments/*" access="ROLE_USER,ROLE_ADMIN"/>
+		<security:intercept-url pattern="/schedule/*" access="ROLE_ADMIN"/>
+		<security:intercept-url pattern="/**" access="ROLE_ANONYMOUS, ROLE_USER,ROLE_ADMIN"/>
 		<security:remember-me key="rememberMe" />
 	</security:http>
 	

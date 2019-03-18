@@ -49,14 +49,6 @@ public class AutoUser implements UserDetails {
 	@OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
 	private List<Appointment> appointments = new ArrayList<Appointment>();
 
-	public Long getAutoUserId() {
-		return autoUserId;
-	}
-
-	public void setAutoUserId(Long autoUserId) {
-		this.autoUserId = autoUserId;
-	}
-
 	public String getFirstName() {
 		return firstName;
 	}
@@ -138,4 +130,5 @@ public class AutoUser implements UserDetails {
 		return true;
 	}
 
+	
 }

@@ -51,10 +51,6 @@ public class Appointment {
 	@Column(name = "STATUS")
 	private String status;
 
-	public Long getId(){
-		return this.appointmentId;
-	}
-	
 	public Long getAppointmentId() {
 		return appointmentId;
 	}

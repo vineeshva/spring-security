@@ -46,6 +46,7 @@
 				<label for="remember">Remember Me?</label>
 				<input type="checkbox" id="remember" name="remember-me"/>
 			</div>
+
 			<sec:csrfInput/>
 
 			<c:if test="${param.logout != null }">

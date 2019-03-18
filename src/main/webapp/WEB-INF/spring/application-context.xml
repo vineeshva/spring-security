@@ -10,7 +10,6 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 
 		<tx:annotation-driven/>
-
 		<jdbc:embedded-database id="datasource" type="H2">
 			<jdbc:script location="classpath:init.sql"/>	
 		</jdbc:embedded-database>
@@ -24,5 +23,6 @@
 			<property name="entityManagerFactory" ref="entityManagerFactory"/>
 		</bean>
 
-		<jpa:repositories base-package="com.oreilly.security"/>	
+		<jpa:repositories base-package="com.oreilly.security"/>
+			
 </beans>
