@@ -19,9 +19,10 @@
 		
 		<security:logout logout-url="/logout" logout-success-url="/login?logout=true"/>
 			
-		<security:intercept-url pattern="/appointments/*" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')"/>
-		<security:intercept-url pattern="/schedule/*" access="principal.username == 'kbowersox'"/>
-		<security:intercept-url pattern="/**" access="permitAll"/>
+		<security:intercept-url pattern="/appointments/*" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')" requires-channel="https"/>
+		<security:intercept-url pattern="/schedule/*" access="principal.username == 'kbowersox'" requires-channel="https"/>
+		<security:intercept-url pattern="/**" access="permitAll" requires-channel="https"/>
+		<security:remember-me key="rememberMe" />
 	</security:http>
 	
 	<security:authentication-manager>

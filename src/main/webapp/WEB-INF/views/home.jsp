@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -29,6 +30,11 @@
 	<div class="container">
 		<div class="row">
 			<h1>Welcome to Kevin's Auto Service Center!</h1>
+			
+			<sec:authorize access="isAuthenticated()">
+				Welcome back <sec:authentication property="principal.firstName"/> <sec:authentication property="principal.lastName"/>
+			</sec:authorize>
+			
 			<h3>Allow our team of completely unqualified mechanics to
 				attempt to fix your automobile.</h3>
 			<p>Using the latest tools of the mechanic trade such as online

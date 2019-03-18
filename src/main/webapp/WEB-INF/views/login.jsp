@@ -42,6 +42,10 @@
 				<label for="model">Password</label>
 				<input type="password" name="custom_password" class="form-control" />
 			</div>
+			<div class="form-group">
+				<label for="remember">Remember Me?</label>
+				<input type="checkbox" id="remember" name="remember-me"/>
+			</div>
 			<sec:csrfInput/>
 
 			<c:if test="${param.logout != null }">
